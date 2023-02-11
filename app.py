@@ -4,8 +4,8 @@ from flask_cors import CORS
 from flask_login import LoginManager
 import os
 from dotenv import load_dotenv
-# from resources.apartment import apartments
-# from resources.user import user
+from resources.apartment import apartments
+from resources.user import user
 
 load_dotenv()
 
@@ -34,11 +34,11 @@ def load_user(user_id):
 
 app.config['CORS_HEADERS'] = 'Content-Type'
 CORS(app, resources={r"/*": {"origins": "*"}})
-# CORS(apartments, origins=['*'], supports_credentials=True)
-# CORS(user, origins=['*'], supports_credentials=True)
+CORS(apartments, origins=['*'], supports_credentials=True)
+CORS(user, origins=['*'], supports_credentials=True)
 
-# app.register_blueprint(apartments,url_prefix='/api/v1/apartments')
-# app.register_blueprint(user,url_prefix='/api/v1/user')
+app.register_blueprint(apartments,url_prefix='/api/v1/apartments')
+app.register_blueprint(user,url_prefix='/api/v1/user')
 
 @app.before_request
 def before_request():
@@ -52,7 +52,7 @@ def before_request():
         print("You should see this after each request")
         models.DATABASE.close()
         return response
-        
+
 # if os.environ.get('FLASK_ENV') != 'development':
 #   print('\non heroku!')
 #   models.initialize()
