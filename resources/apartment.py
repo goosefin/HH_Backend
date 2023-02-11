@@ -31,3 +31,31 @@ def create_apartment():
         message='Successfully created apartment',
         status = 201
     ),201
+
+#SHOW, DELETE, UPDATE
+@apartments.route('/<id>',methods=['GET','PUT','DELETE'])
+@login_required
+def handle_one_apartment(id):
+    if request.method == 'GET':
+        apartment = models.Apartment.get_by_id(id)
+        return jsonify(
+            data = model_to_dict(apartment),
+            message = 'Successfully found apartment',
+            status = 200
+        ), 200
+    elif request.method == 'PUT':
+        payload = request.get_json()
+        query = models.Apartment.update(**payload).where(models.Apartment.id == id)
+        query.execute()
+        return jsonify(
+            data = model_to_dict(models.Apartment.get_by_id(id)),
+            message = 'Successfully updated apartment',
+            status = 200
+        ), 200
+    else:
+        query = models.Apartment.delete().where(models.Apartment.id == id)
+        query.execute()
+        return jsonify(
+            message = 'Successfully deleted apartment',
+            status = 204
+        ), 204
