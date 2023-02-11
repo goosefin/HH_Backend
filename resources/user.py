@@ -36,4 +36,12 @@ def register():
             }
         ),201
 
-#LOGIN
+#LOGOUT
+@user.route('/logout', methods = ['GET'])
+def logout():
+    logout_user()
+    return jsonify(
+        data={},
+        status=200,
+        message='Successfully logged out'
+    ),200
