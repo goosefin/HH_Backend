@@ -19,3 +19,15 @@ def apartments_index():
     }), 200
 
 #CREATE
+@apartments.route('/', methods=['POST'])
+@login_required
+def create_apartment():
+    payload = request.get_json()
+    print(payload)
+    new_apartment = models.Apartment.create(address=payload['address'],bedrooms=payload['bedrooms'],price=payload['price'],cats=payload['cats'],dogs=payload['dogs'],laundry=payload['laundry'],dishwasher=payload['dishwasher'],outdoor_space=payload['outdoor_space'],elevator=payload['elevator'],doorman=payload['doorman'],link=payload['link'],scheduled_showing=payload['scheduled_showing'],scheduled_showing_time=payload['scheduled_showing_time'],seen=payload['seen'],applied=payload['applied'], approved=payload['approved'],user=current_user.id) 
+    apartment_dict = model_to_dict(new_apartment)
+    return jsonify(
+        data = apartment_dict,
+        message='Successfully created apartment',
+        status = 201
+    ),201
