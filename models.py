@@ -1,5 +1,7 @@
 from peewee import *
 from flask_login import UserMixin
+import os
+from playhouse.db_url import connect
 
 DATABASE = SqliteDatabase('apartments.sqlite')
 
