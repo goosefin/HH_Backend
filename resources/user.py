@@ -36,6 +36,40 @@ def register():
             }
         ),201
 
+#LOGIN
+@user.route('/login',methods=['POST'])
+def login():
+    payload=request.get_json()
+    try:
+        user = models.User.get(models.User.email == payload['email'])
+        user_dict = model_to_dict(user)
+        if(check_password_hash(user_dict['password'], payload['password'])):
+            del user_dict['password']
+            login_user(user)
+            return jsonify(
+                data=user_dict,
+                status = {
+                    'code':200,
+                    'message':'Successfully logged in'
+                }
+            ),200
+        else:
+            return jsonify(
+                data={},
+                status= {
+                    'code':401,
+                    'message':'Username or password is incorrect'
+                }
+            ),401
+    except models.DoesNotExist:
+        return jsonify(
+            data={},
+            status={
+                'code': 401,
+                'message':'User does not exist'
+            }
+        ),401
+
 #LOGOUT
 @user.route('/logout', methods = ['GET'])
 def logout():
